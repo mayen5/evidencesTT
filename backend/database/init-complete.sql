@@ -160,26 +160,6 @@ END
 GO
 
 -- Tabla: Attachments
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Attachments')
-BEGIN
-    CREATE TABLE Attachments (
-        Id INT PRIMARY KEY IDENTITY(1,1),
-        CaseFileId INT NOT NULL,
-        FileName NVARCHAR(255) NOT NULL,
-        FilePath NVARCHAR(500) NOT NULL,
-        FileSize BIGINT NOT NULL,
-        MimeType NVARCHAR(100) NOT NULL,
-        UploadedById INT NOT NULL,
-        UploadedAt DATETIME2 DEFAULT GETDATE(),
-        DeletedById INT NULL,
-        DeletedAt DATETIME2 NULL,
-        IsDeleted BIT DEFAULT 0,
-        CONSTRAINT FK_Attachments_CaseFile FOREIGN KEY (CaseFileId) REFERENCES CaseFiles(Id) ON DELETE CASCADE,
-        CONSTRAINT FK_Attachments_UploadedBy FOREIGN KEY (UploadedById) REFERENCES Users(Id),
-        CONSTRAINT FK_Attachments_DeletedBy FOREIGN KEY (DeletedById) REFERENCES Users(Id)
-    );
-    PRINT '  - Tabla Attachments creada';
-END
 GO
 
 -- Tabla: CaseFileParticipants
