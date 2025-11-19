@@ -35,7 +35,7 @@ export const connectDatabase = async (): Promise<sql.ConnectionPool> => {
         logger.info('SQL Server connected successfully');
 
         // Handle pool errors
-        pool.on('error', (err) => {
+        pool.on('error', (err: Error) => {
             logger.error('SQL Pool Error:', err);
         });
 

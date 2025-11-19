@@ -19,8 +19,8 @@ interface Config {
     jwt: {
         secret: string;
         refreshSecret: string;
-        expiresIn: string;
-        refreshExpiresIn: string;
+        expiresIn: string | number;
+        refreshExpiresIn: string | number;
     };
     cors: {
         origin: string;

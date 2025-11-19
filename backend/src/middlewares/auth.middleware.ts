@@ -29,4 +29,35 @@ export const authenticate = (req: Request, res: Response, next: NextFunction): v
     }
 };
 
+/**
+ * Authorization middleware - checks if user has required role
+ * @param allowedRoles Array of roleIds that are allowed to access the route
+ */
+export const authorize = (allowedRoles: number[]) => {
+    return (req: Request, res: Response, next: NextFunction): void => {
+        try {
+            if (!req.user) {
+                res.status(401).json({ error: 'No user authenticated' });
+                return;
+            }
+
+            if (!allowedRoles.includes(req.user.roleId)) {
+                logger.warn('Authorization failed:', {
+                    userId: req.user.userId,
+                    userRole: req.user.roleId,
+                    allowedRoles,
+                });
+                res.status(403).json({ error: 'No tienes permisos para acceder a este recurso' });
+                return;
+            }
+
+            next();
+        } catch (error) {
+            logger.error('Authorization error:', error);
+            res.status(500).json({ error: 'Authorization error' });
+            return;
+        }
+    };
+};
+
 export default authenticate;
