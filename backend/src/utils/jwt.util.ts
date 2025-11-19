@@ -11,14 +11,14 @@ export interface JwtPayload {
 
 export const generateAccessToken = (payload: Omit<JwtPayload, 'username' | 'roleName'>): string => {
     const options: SignOptions = {
-        expiresIn: config.jwt.expiresIn as SignOptions[ 'expiresIn' ],
+        expiresIn: config.jwt.expiresIn as SignOptions['expiresIn'],
     };
     return jwt.sign(payload as object, config.jwt.secret, options);
 };
 
 export const generateRefreshToken = (payload: Pick<JwtPayload, 'userId' | 'email'>): string => {
     const options: SignOptions = {
-        expiresIn: config.jwt.refreshExpiresIn as SignOptions[ 'expiresIn' ],
+        expiresIn: config.jwt.refreshExpiresIn as SignOptions['expiresIn'],
     };
     return jwt.sign(payload as object, config.jwt.refreshSecret, options);
 };
