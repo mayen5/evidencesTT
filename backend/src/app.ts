@@ -9,8 +9,8 @@ import { requestLogger } from './middlewares/requestLogger.middleware';
 import { errorHandler, notFoundHandler } from './middlewares/errorHandler.middleware';
 import { generalLimiter } from './middlewares/rateLimit.middleware';
 
-// Import routes (will be created)
-// import routes from './routes';
+// Import routes
+import routes from './routes';
 
 const app: Application = express();
 
@@ -56,7 +56,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
 }));
 
 // API routes
-// app.use(`/api/${config.apiVersion}`, routes);
+app.use(`/api/${config.apiVersion}`, routes);
 
 // 404 handler
 app.use(notFoundHandler);

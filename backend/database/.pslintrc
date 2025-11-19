@@ -1,0 +1,18 @@
+# PSScriptAnalyzer configuration file
+
+# https://github.com/PowerShell/PSScriptAnalyzer
+
+@{ # Exclude rules that are not applicable for Docker/automation scripts
+ExcludeRules = @(
+'PSAvoidUsingPlainTextForPassword',
+'PSAvoidAssignmentToAutomaticVariable',
+'PSUseDeclaredVarsMoreThanAssignments'
+)
+
+    # Include all default rules except the ones excluded above
+    IncludeDefaultRules = $true
+
+    # Severity levels to report
+    Severity = @('Error', 'Warning')
+
+}

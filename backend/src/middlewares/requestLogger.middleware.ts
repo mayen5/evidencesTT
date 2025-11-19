@@ -3,7 +3,7 @@ import morgan from 'morgan';
 import { logger } from '../utils/logger';
 
 // Custom morgan token for response time
-morgan.token('response-time-ms', (req: Request, res: Response) => {
+morgan.token('response-time-ms', (_req: Request, res: Response) => {
     const responseTime = res.get('X-Response-Time');
     return responseTime || '-';
 });
