@@ -64,6 +64,20 @@ services:
       - evidence-network
     restart: unless-stopped
 
+  # React Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: evidence-frontend
+    ports:
+      - "3001:80"
+    depends_on:
+      - backend
+    networks:
+      - evidence-network
+    restart: unless-stopped
+
 volumes:
   sqlserver_data:
     driver: local
