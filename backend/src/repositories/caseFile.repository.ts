@@ -131,16 +131,19 @@ export const updateCaseFile = async (
     title?: string,
     description?: string,
     location?: string,
-    incidentDate?: Date
+    incidentDate?: Date,
+    updatedById: number = 1
 ): Promise<{ message: string }> => {
     const pool = await getPool();
     const result = await pool
         .request()
         .input('CaseFileId', sql.Int, caseFileId)
-        .input('Title', sql.VarChar(200), title || null)
+        .input('Title', sql.NVarChar(200), title || null)
         .input('Description', sql.NVarChar(sql.MAX), description || null)
-        .input('Location', sql.VarChar(200), location || null)
-        .input('IncidentDate', sql.DateTime, incidentDate || null)
+        .input('IncidentDate', sql.DateTime2, incidentDate || null)
+        .input('Location', sql.NVarChar(300), location || null)
+        .input('Priority', sql.Int, null)
+        .input('UpdatedById', sql.Int, updatedById)
         .execute('sp_UpdateCaseFile');
 
     if (result.recordset && result.recordset.length > 0) {

@@ -1,12 +1,15 @@
-// Global test setup
-beforeAll(() => {
-    // Setup before all tests
-    process.env.NODE_ENV = 'test';
-});
+import { connectDatabase, closeDatabase } from '../src/config/database';
 
-afterAll(() => {
+// Global test setup
+beforeAll(async () => {
+    // Connect to database
+    await connectDatabase();
+}, 30000);
+
+afterAll(async () => {
     // Cleanup after all tests
-});
+    await closeDatabase();
+}, 30000);
 
 // Suppress console logs during tests
 global.console = {

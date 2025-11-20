@@ -73,7 +73,7 @@ export const getAllCaseFiles = async (data: GetAllCaseFilesInput): Promise<IPagi
 /**
  * Update case file
  */
-export const updateCaseFile = async (caseFileId: number, data: UpdateCaseFileInput): Promise<{ message: string }> => {
+export const updateCaseFile = async (caseFileId: number, data: UpdateCaseFileInput, updatedById: number): Promise<{ message: string }> => {
     try {
         const incidentDate = data.incidentDate
             ? (typeof data.incidentDate === 'string' ? new Date(data.incidentDate) : data.incidentDate)
@@ -84,7 +84,8 @@ export const updateCaseFile = async (caseFileId: number, data: UpdateCaseFileInp
             data.title,
             data.description,
             data.location,
-            incidentDate
+            incidentDate,
+            updatedById
         );
 
         return result;

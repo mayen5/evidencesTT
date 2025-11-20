@@ -18,10 +18,14 @@ export const addEvidence = async (
         .request()
         .input('CaseFileId', sql.Int, caseFileId)
         .input('EvidenceTypeId', sql.Int, evidenceTypeId)
-        .input('Description', sql.VarChar(500), description)
-        .input('Location', sql.VarChar(200), location || null)
-        .input('CollectedBy', sql.Int, collectedBy)
-        .input('CollectionDate', sql.DateTime, collectionDate)
+        .input('Title', sql.NVarChar(200), `Evidence ${new Date().getTime()}`)
+        .input('Description', sql.NVarChar(sql.MAX), description)
+        .input('CollectionDate', sql.DateTime2, collectionDate)
+        .input('CollectionLocation', sql.NVarChar(300), location || null)
+        .input('CollectedById', sql.Int, collectedBy)
+        .input('StorageLocation', sql.NVarChar(200), null)
+        .input('ChainOfCustody', sql.NVarChar(sql.MAX), null)
+        .output('NewEvidenceId', sql.Int)
         .execute('sp_AddEvidence');
 
     if (result.recordset && result.recordset.length > 0) {

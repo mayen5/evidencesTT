@@ -86,8 +86,9 @@ export const updateCaseFile = async (req: Request, res: Response, next: NextFunc
     try {
         const { id } = caseFileIdSchema.parse(req.params);
         const validatedData = updateCaseFileSchema.parse(req.body);
+        const userId = req.user?.userId || 1;
 
-        const result = await caseFileService.updateCaseFile(id, validatedData);
+        const result = await caseFileService.updateCaseFile(id, validatedData, userId);
 
         res.status(200).json({
             success: true,
