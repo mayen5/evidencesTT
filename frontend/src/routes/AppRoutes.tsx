@@ -4,13 +4,14 @@ import { ProtectedRoute } from './ProtectedRoute';
 import { UserRole } from '../types';
 
 // Lazy load pages
-const LoginPage = React.lazy(() => import('../pages/auth/LoginPage'));
-const DashboardPage = React.lazy(() => import('../pages/dashboard/DashboardPage'));
-const CaseFilesListPage = React.lazy(() => import('../pages/caseFiles/CaseFilesListPage'));
-const CaseFileDetailPage = React.lazy(() => import('../pages/caseFiles/CaseFileDetailPage'));
-const CaseFileFormPage = React.lazy(() => import('../pages/caseFiles/CaseFileFormPage'));
-const UsersListPage = React.lazy(() => import('../pages/users/UsersListPage'));
-const UnauthorizedPage = React.lazy(() => import('../pages/auth/UnauthorizedPage'));
+const LoginPage = React.lazy(() => import('../pages/auth/LoginPage.tsx'));
+const DashboardPage = React.lazy(() => import('../pages/dashboard/DashboardPage.tsx'));
+const CaseFilesListPage = React.lazy(() => import('../pages/caseFiles/CaseFilesListPage.tsx'));
+const CaseFileDetailPage = React.lazy(() => import('../pages/caseFiles/CaseFileDetailPage.tsx'));
+const CaseFileFormPage = React.lazy(() => import('../pages/caseFiles/CaseFileFormPage.tsx'));
+const EvidenceListPage = React.lazy(() => import('../pages/evidence/EvidenceListPage.tsx'));
+const UsersListPage = React.lazy(() => import('../pages/users/UsersListPage.tsx'));
+const UnauthorizedPage = React.lazy(() => import('../pages/auth/UnauthorizedPage.tsx'));
 
 export const AppRoutes: React.FC = () => {
     return (
@@ -79,6 +80,16 @@ export const AppRoutes: React.FC = () => {
                         element={
                             <ProtectedRoute allowedRoles={[ UserRole.ADMIN, UserRole.TECHNICIAN ]}>
                                 <CaseFileFormPage />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    {/* Evidence Routes */}
+                    <Route
+                        path="/evidence"
+                        element={
+                            <ProtectedRoute>
+                                <EvidenceListPage />
                             </ProtectedRoute>
                         }
                     />

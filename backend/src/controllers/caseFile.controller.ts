@@ -174,3 +174,20 @@ export const deleteCaseFile = async (req: Request, res: Response, next: NextFunc
         next(error);
     }
 };
+
+/**
+ * Get case files statistics
+ * GET /api/v1/case-files/statistics
+ */
+export const getCaseFileStatistics = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const result = await caseFileService.getCaseFileStatistics();
+
+        res.status(200).json({
+            success: true,
+            data: result,
+        });
+    } catch (error) {
+        next(error);
+    }
+};

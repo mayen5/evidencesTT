@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
-import Navbar from './Navbar';
-import Sidebar from './Sidebar';
+import Navbar from './Navbar.tsx';
+import Sidebar from './Sidebar.tsx';
 
 interface MainLayoutProps {
     children: React.ReactNode;
@@ -17,7 +17,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     };
 
     return (
-        <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+        <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#f5f5f5', width: '100vw' }}>
             <Navbar drawerWidth={DRAWER_WIDTH} onMenuClick={handleDrawerToggle} open={sidebarOpen} />
             <Sidebar drawerWidth={DRAWER_WIDTH} open={sidebarOpen} onClose={handleDrawerToggle} />
             <Box
@@ -25,13 +25,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 sx={{
                     flexGrow: 1,
                     p: 3,
-                    width: { sm: `calc(100% - ${sidebarOpen ? DRAWER_WIDTH : 0}px)` },
                     marginTop: '64px',
-                    transition: (theme) =>
-                        theme.transitions.create([ 'width', 'margin' ], {
-                            easing: theme.transitions.easing.sharp,
-                            duration: theme.transitions.duration.leavingScreen,
-                        }),
+                    minHeight: 'calc(100vh - 64px)',
+                    overflow: 'auto',
                 }}
             >
                 {children}

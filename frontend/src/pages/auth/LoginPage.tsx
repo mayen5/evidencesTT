@@ -3,14 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {
-    Container,
     Box,
     Paper,
     TextField,
     Button,
     Typography,
     CircularProgress,
+    Divider,
+    alpha,
 } from '@mui/material';
+import {
+    Lock as LockIcon,
+    Person as PersonIcon,
+    Gavel as GavelIcon,
+} from '@mui/icons-material';
 import { useAuth } from '../../hooks/useAuth';
 
 const validationSchema = Yup.object({
@@ -24,14 +30,16 @@ const validationSchema = Yup.object({
 
 const LoginPage: React.FC = () => {
     const navigate = useNavigate();
-    const { login, isAuthenticated, isLoading } = useAuth();
+    const { login, isAuthenticated, isLoading, user } = useAuth();
 
     // Redirect if already authenticated
     useEffect(() => {
+        console.log('useEffect triggered:', { isAuthenticated, isLoading, user });
         if (isAuthenticated && !isLoading) {
-            navigate('/dashboard');
+            console.log('Redirecting to dashboard via useEffect');
+            navigate('/dashboard', { replace: true });
         }
-    }, [ isAuthenticated, isLoading, navigate ]);
+    }, [ isAuthenticated, isLoading, user, navigate ]);
 
     const formik = useFormik({
         initialValues: {
@@ -41,8 +49,11 @@ const LoginPage: React.FC = () => {
         validationSchema,
         onSubmit: async (values) => {
             try {
+                console.log('Starting login...');
                 await login(values);
-                navigate('/dashboard');
+                console.log('Login successful, navigating directly...');
+                // Direct navigation after successful login
+                window.location.href = '/dashboard';
             } catch (error) {
                 // Error is handled by AuthContext (toast)
                 console.error('Login error:', error);
@@ -57,51 +68,98 @@ const LoginPage: React.FC = () => {
                 justifyContent="center"
                 alignItems="center"
                 minHeight="100vh"
+                sx={{
+                    background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)',
+                }}
             >
-                <CircularProgress />
+                <CircularProgress sx={{ color: 'white' }} />
             </Box>
         );
     }
 
     return (
-        <Container component="main" maxWidth="xs">
+        <Box
+            sx={{
+                minHeight: '100vh',
+                width: '100vw',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)',
+                position: 'relative',
+                overflow: 'hidden',
+                p: 0,
+                m: 0,
+                '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+                },
+            }}
+        >
             <Box
                 sx={{
-                    marginTop: 8,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
+                    position: 'relative',
+                    zIndex: 1,
+                    width: '100%',
+                    maxWidth: 550,
+                    px: 3,
                 }}
             >
                 <Paper
-                    elevation={3}
+                    elevation={24}
                     sx={{
-                        padding: 4,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        width: '100%',
+                        p: { xs: 4, sm: 6 },
+                        borderRadius: 4,
+                        background: 'rgba(255, 255, 255, 0.98)',
+                        backdropFilter: 'blur(10px)',
                     }}
                 >
-                    <Typography component="h1" variant="h5" gutterBottom>
-                        Sistema de Gestión de Evidencias
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
-                        Iniciar Sesión
-                    </Typography>
+                    <Box sx={{ textAlign: 'center', mb: 5 }}>
+                        <Box
+                            sx={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: 100,
+                                height: 100,
+                                borderRadius: '50%',
+                                background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)',
+                                mb: 3,
+                                boxShadow: '0 12px 32px rgba(30, 60, 114, 0.4)',
+                            }}
+                        >
+                            <GavelIcon sx={{ fontSize: 50, color: 'white' }} />
+                        </Box>
+                        <Typography
+                            component="h1"
+                            variant="h3"
+                            sx={{ fontWeight: 700, mb: 1, color: 'text.primary' }}
+                        >
+                            Sistema de Gestión
+                        </Typography>
+                        <Typography
+                            variant="h5"
+                            sx={{ fontWeight: 400, mb: 3, color: 'text.secondary' }}
+                        >
+                            de Evidencias
+                        </Typography>
+                        <Typography variant="body1" color="text.secondary">
+                            Ingresa tus credenciales para continuar
+                        </Typography>
+                    </Box>
 
-                    <Box
-                        component="form"
-                        onSubmit={formik.handleSubmit}
-                        noValidate
-                        sx={{ mt: 1, width: '100%' }}
-                    >
+                    <Box component="form" onSubmit={formik.handleSubmit} noValidate>
                         <TextField
                             margin="normal"
                             required
                             fullWidth
                             id="email"
-                            label="Email"
+                            label="Correo Electrónico"
                             name="email"
                             autoComplete="email"
                             autoFocus
@@ -110,6 +168,12 @@ const LoginPage: React.FC = () => {
                             onBlur={formik.handleBlur}
                             error={formik.touched.email && Boolean(formik.errors.email)}
                             helperText={formik.touched.email && formik.errors.email}
+                            InputProps={{
+                                sx: { borderRadius: 2, fontSize: '1.1rem', py: 1 },
+                            }}
+                            InputLabelProps={{
+                                sx: { fontSize: '1.1rem' },
+                            }}
                         />
                         <TextField
                             margin="normal"
@@ -125,33 +189,73 @@ const LoginPage: React.FC = () => {
                             onBlur={formik.handleBlur}
                             error={formik.touched.password && Boolean(formik.errors.password)}
                             helperText={formik.touched.password && formik.errors.password}
+                            InputProps={{
+                                sx: { borderRadius: 2, fontSize: '1.1rem', py: 1 },
+                            }}
+                            InputLabelProps={{
+                                sx: { fontSize: '1.1rem' },
+                            }}
                         />
+
                         <Button
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
+                            size="large"
                             disabled={formik.isSubmitting}
+                            sx={{
+                                mt: 4,
+                                mb: 2,
+                                py: 2,
+                                borderRadius: 2,
+                                fontSize: '1.1rem',
+                                fontWeight: 600,
+                                textTransform: 'none',
+                                background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)',
+                                '&:hover': {
+                                    background: 'linear-gradient(135deg, #1a3460 0%, #245085 100%)',
+                                    boxShadow: '0 8px 16px rgba(30, 60, 114, 0.3)',
+                                },
+                            }}
                         >
                             {formik.isSubmitting ? (
-                                <CircularProgress size={24} color="inherit" />
+                                <CircularProgress size={28} color="inherit" />
                             ) : (
                                 'Iniciar Sesión'
                             )}
                         </Button>
 
-                        <Box sx={{ mt: 2, textAlign: 'center' }}>
+                        <Divider sx={{ my: 4 }}>
                             <Typography variant="body2" color="text.secondary">
-                                Credenciales de prueba:
+                                Credenciales de Prueba
                             </Typography>
-                            <Typography variant="caption" display="block">
-                                admin@evidence.com / Admin@123
-                            </Typography>
+                        </Divider>
+
+                        <Box
+                            sx={{
+                                p: 3,
+                                borderRadius: 2,
+                                bgcolor: (theme) => alpha(theme.palette.primary.main, 0.05),
+                                border: (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+                            }}
+                        >
+                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                                <PersonIcon sx={{ fontSize: 20, mr: 1.5, color: 'primary.main' }} />
+                                <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                                    admin@evidence.com
+                                </Typography>
+                            </Box>
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                <LockIcon sx={{ fontSize: 20, mr: 1.5, color: 'primary.main' }} />
+                                <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                                    Admin@123
+                                </Typography>
+                            </Box>
                         </Box>
                     </Box>
                 </Paper>
             </Box>
-        </Container>
+        </Box>
     );
 };
 

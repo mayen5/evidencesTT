@@ -52,3 +52,36 @@ export const registerUser = async (
         message: 'Usuario registrado exitosamente',
     };
 };
+
+/**
+ * Get user by ID
+ */
+export const getUserById = async (userId: number): Promise<IUser | null> => {
+    const pool = await getPool();
+    const result = await pool
+        .request()
+        .input('UserId', sql.Int, userId)
+        .query(`
+            SELECT 
+                u.Id,
+                u.Username,
+                u.Email,
+                u.PasswordHash,
+                u.FirstName,
+                u.LastName,
+                u.RoleId,
+                r.Name AS RoleName,
+                u.IsActive,
+                u.CreatedAt,
+                u.UpdatedAt
+            FROM Users u
+            INNER JOIN Roles r ON u.RoleId = r.Id
+            WHERE u.Id = @UserId AND u.IsActive = 1
+        `);
+
+    if (result.recordset && result.recordset.length > 0) {
+        return result.recordset[ 0 ] as IUser;
+    }
+
+    return null;
+};

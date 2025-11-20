@@ -26,7 +26,7 @@ export const caseFileService = {
     ): Promise<PaginatedResponse<CaseFile>> {
         const params = new URLSearchParams({
             page: page.toString(),
-            limit: limit.toString(),
+            pageSize: limit.toString(),
             ...(filters?.search && { search: filters.search }),
             ...(filters?.statusId && { statusId: filters.statusId.toString() }),
             ...(filters?.technicianId && { technicianId: filters.technicianId.toString() }),
@@ -35,10 +35,23 @@ export const caseFileService = {
             ...(filters?.toDate && { toDate: filters.toDate }),
         });
 
-        const response = await apiClient.get<PaginatedResponse<CaseFile>>(
+        const response = await apiClient.get<ApiResponse<any>>(
             `/case-files?${params.toString()}`
         );
-        return response.data;
+
+        // Transform backend response to frontend format
+        const backendData = response.data.data;
+        return {
+            success: response.data.success,
+            message: response.data.message || '',
+            data: backendData.caseFiles || [],
+            pagination: {
+                page: backendData.page || page,
+                limit: backendData.pageSize || limit,
+                total: backendData.totalRecords || 0,
+                totalPages: backendData.totalPages || 1,
+            },
+        };
     },
 
     /**

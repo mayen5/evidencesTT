@@ -11,6 +11,20 @@ router.use(authenticate);
 
 /**
  * @swagger
+ * /api/v1/case-files/statistics:
+ *   get:
+ *     summary: Get case files statistics
+ *     tags: [CaseFiles]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Statistics retrieved successfully
+ */
+router.get('/statistics', caseFileController.getCaseFileStatistics);
+
+/**
+ * @swagger
  * /api/v1/case-files:
  *   post:
  *     summary: Create a new case file

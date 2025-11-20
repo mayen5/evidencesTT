@@ -85,3 +85,28 @@ export const logout = async (_req: Request, res: Response, next: NextFunction): 
         next(error);
     }
 };
+
+/**
+ * Get current user controller
+ * GET /api/v1/auth/me
+ */
+export const getCurrentUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        if (!req.user) {
+            throw new ApiError(401, 'No autenticado');
+        }
+
+        const user = await authService.getUserById(req.user.userId);
+
+        if (!user) {
+            throw new ApiError(404, 'Usuario no encontrado');
+        }
+
+        res.status(200).json({
+            success: true,
+            data: user,
+        });
+    } catch (error) {
+        next(error);
+    }
+};

@@ -46,7 +46,7 @@ const menuItems: MenuItem[] = [
     {
         text: 'Evidencias',
         icon: <DescriptionIcon />,
-        path: '/case-files', // Redirecciona a expedientes
+        path: '/evidence',
     },
     {
         text: 'Usuarios',

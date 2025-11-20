@@ -230,3 +230,36 @@ export const deleteCaseFile = async (caseFileId: number): Promise<{ message: str
 
     return { message: 'Caso eliminado correctamente' };
 };
+
+/**
+ * Get case file statistics
+ */
+export const getCaseFileStatistics = async (): Promise<{
+    total: number;
+    approved: number;
+    rejected: number;
+    pending: number;
+}> => {
+    const pool = await getPool();
+    const result = await pool
+        .request()
+        .query(`
+            SELECT 
+                COUNT(*) AS total,
+                SUM(CASE WHEN StatusId = 3 THEN 1 ELSE 0 END) AS approved,
+                SUM(CASE WHEN StatusId = 4 THEN 1 ELSE 0 END) AS rejected,
+                SUM(CASE WHEN StatusId IN (1, 2) THEN 1 ELSE 0 END) AS pending
+            FROM CaseFiles
+        `);
+
+    if (result.recordset && result.recordset.length > 0) {
+        return result.recordset[ 0 ];
+    }
+
+    return {
+        total: 0,
+        approved: 0,
+        rejected: 0,
+        pending: 0,
+    };
+};

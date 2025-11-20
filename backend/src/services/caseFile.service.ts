@@ -152,3 +152,15 @@ export const deleteCaseFile = async (caseFileId: number): Promise<{ message: str
         throw error;
     }
 };
+
+/**
+ * Get case file statistics
+ */
+export const getCaseFileStatistics = async (): Promise<{
+    total: number;
+    approved: number;
+    rejected: number;
+    pending: number;
+}> => {
+    return await caseFileRepo.getCaseFileStatistics();
+};

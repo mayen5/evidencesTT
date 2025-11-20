@@ -111,3 +111,29 @@ export const refreshAccessToken = async (userId: number, email: string, roleId: 
 
     return { accessToken };
 };
+
+/**
+ * Get user by ID
+ */
+export const getUserById = async (userId: number): Promise<IUserResponse | null> => {
+    const { getUserById: getUserByIdRepo } = await import('../repositories/auth.repository');
+    const user = await getUserByIdRepo(userId);
+
+    if (!user) {
+        return null;
+    }
+
+    const userResponse: IUserResponse = {
+        userId: user.Id,
+        email: user.Email,
+        firstName: user.FirstName,
+        lastName: user.LastName,
+        roleId: user.RoleId,
+        roleName: user.RoleName,
+        isActive: user.IsActive,
+        createdAt: user.CreatedAt,
+        updatedAt: user.UpdatedAt,
+    };
+
+    return userResponse;
+};
