@@ -1,7 +1,7 @@
 -- =============================================
 -- Stored Procedure: sp_RejectCaseFile
 -- Description: Rejects a case file by coordinator with reason
--- Author: System
+-- Author: Carmelo Mayén
 -- Date: 2025-11-18
 -- =============================================
 

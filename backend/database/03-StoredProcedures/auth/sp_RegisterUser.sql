@@ -1,7 +1,7 @@
 -- =============================================
 -- Stored Procedure: sp_RegisterUser
 -- Description: Registers a new user in the system
--- Author: System
+-- Author: Carmelo Mayén
 -- Date: 2025-11-18
 -- =============================================
 

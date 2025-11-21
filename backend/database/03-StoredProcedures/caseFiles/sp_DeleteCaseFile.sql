@@ -1,7 +1,7 @@
 -- =============================================
 -- Stored Procedure: sp_DeleteCaseFile
 -- Description: Deletes a case file (only in Borrador or Rechazado status)
--- Author: System
+-- Author: Carmelo Mayén
 -- Date: 2025-11-18
 -- =============================================
 

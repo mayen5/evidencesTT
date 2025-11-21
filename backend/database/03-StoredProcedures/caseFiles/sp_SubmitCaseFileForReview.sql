@@ -1,7 +1,7 @@
 -- =============================================
 -- Stored Procedure: sp_SubmitCaseFileForReview
 -- Description: Submits a case file for coordinator review
--- Author: System
+-- Author: Carmelo May�n
 -- Date: 2025-11-18
 -- =============================================
 
@@ -39,7 +39,7 @@ BEGIN
         
         -- Validate that case file has at least one evidence
         DECLARE @EvidenceCount INT;
-        SELECT @EvidenceCount = COUNT(*) FROM Evidence WHERE CaseFileId = @CaseFileId;
+        SELECT @EvidenceCount = COUNT(*) FROM TraceEvidence WHERE CaseFileId = @CaseFileId;
         
         IF @EvidenceCount = 0
         BEGIN

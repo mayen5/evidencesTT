@@ -1,7 +1,7 @@
 -- =============================================
 -- Script: Create Triggers
 -- Description: Creates triggers for audit and business logic
--- Author: System
+-- Author: Carmelo May�n
 -- Date: 2025-11-18
 -- =============================================
 
@@ -43,27 +43,27 @@ END;
 GO
 
 -- =============================================
--- Trigger: Update timestamp on Evidence table
+-- Trigger: Update timestamp on TraceEvidence table
 -- =============================================
-CREATE TRIGGER TR_Evidence_UpdateTimestamp
-ON Evidence
+CREATE TRIGGER TR_TraceEvidence_UpdateTimestamp
+ON TraceEvidence
 AFTER UPDATE
 AS
 BEGIN
     SET NOCOUNT ON;
     
-    UPDATE Evidence
+    UPDATE TraceEvidence
     SET UpdatedAt = GETDATE()
-    FROM Evidence e
+    FROM TraceEvidence e
     INNER JOIN inserted i ON e.Id = i.Id;
 END;
 GO
 
 -- =============================================
--- Trigger: Auto-add participant when evidence is added
+-- Trigger: Auto-add participant when trace evidence is added
 -- =============================================
-CREATE TRIGGER TR_Evidence_AddParticipant
-ON Evidence
+CREATE TRIGGER TR_TraceEvidence_AddParticipant
+ON TraceEvidence
 AFTER INSERT
 AS
 BEGIN
@@ -74,7 +74,7 @@ BEGIN
     SELECT DISTINCT 
         i.CaseFileId, 
         i.CollectedById, 
-        'Recolector de Evidencia'
+        'Recolector de Indicios'
     FROM inserted i
     WHERE NOT EXISTS (
         SELECT 1 

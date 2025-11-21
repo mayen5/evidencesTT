@@ -1,7 +1,7 @@
 -- =============================================
 -- Script: Create Indexes
 -- Description: Creates indexes for performance optimization
--- Author: System
+-- Author: Carmelo May�n
 -- Date: 2025-11-18
 -- =============================================
 
@@ -29,13 +29,13 @@ CREATE INDEX IX_CaseFiles_StatusId_RegisteredAt ON CaseFiles(StatusId, Registere
 GO
 
 -- =============================================
--- Indexes for Evidence table
+-- Indexes for TraceEvidence table
 -- =============================================
-CREATE INDEX IX_Evidence_CaseFileId ON Evidence(CaseFileId);
-CREATE INDEX IX_Evidence_EvidenceTypeId ON Evidence(EvidenceTypeId);
-CREATE INDEX IX_Evidence_CollectedById ON Evidence(CollectedById);
-CREATE INDEX IX_Evidence_CollectedAt ON Evidence(CollectedAt);
-CREATE INDEX IX_Evidence_CaseFileId_EvidenceNumber ON Evidence(CaseFileId, EvidenceNumber);
+CREATE INDEX IX_TraceEvidence_CaseFileId ON TraceEvidence(CaseFileId);
+CREATE INDEX IX_TraceEvidence_TraceEvidenceTypeId ON TraceEvidence(TraceEvidenceTypeId);
+CREATE INDEX IX_TraceEvidence_CollectedById ON TraceEvidence(CollectedById);
+CREATE INDEX IX_TraceEvidence_CollectedAt ON TraceEvidence(CollectedAt);
+CREATE INDEX IX_TraceEvidence_CaseFileId_EvidenceNumber ON TraceEvidence(CaseFileId, EvidenceNumber);
 GO
 
 -- =============================================
@@ -58,7 +58,7 @@ GO
 -- =============================================
 -- Indexes for Attachments table
 -- =============================================
-CREATE INDEX IX_Attachments_EvidenceId ON Attachments(EvidenceId);
+CREATE INDEX IX_Attachments_TraceEvidenceId ON Attachments(TraceEvidenceId);
 CREATE INDEX IX_Attachments_CaseFileId ON Attachments(CaseFileId);
 CREATE INDEX IX_Attachments_UploadedById ON Attachments(UploadedById);
 CREATE INDEX IX_Attachments_CreatedAt ON Attachments(CreatedAt);

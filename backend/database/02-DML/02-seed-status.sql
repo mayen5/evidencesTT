@@ -1,7 +1,7 @@
 -- =============================================
 -- Script: Seed Case File Status
 -- Description: Insert initial case file statuses
--- Author: System
+-- Author: Carmelo Mayén
 -- Date: 2025-11-18
 -- =============================================
 

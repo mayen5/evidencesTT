@@ -1,7 +1,7 @@
 -- =============================================
 -- Stored Procedure: sp_GetAllCaseFiles
 -- Description: Gets all case files with pagination and filtering
--- Author: System
+-- Author: Carmelo May�n
 -- Date: 2025-11-18
 -- =============================================
 
@@ -57,10 +57,11 @@ BEGIN
                 THEN rev.FirstName + ' ' + rev.LastName 
                 ELSE NULL 
             END AS ReviewedByName,
+            cf.RejectionReason,
             cf.RegisteredAt,
             cf.ReviewedAt,
             cf.ApprovedAt,
-            (SELECT COUNT(*) FROM Evidence WHERE CaseFileId = cf.Id) AS EvidenceCount
+            (SELECT COUNT(*) FROM TraceEvidence WHERE CaseFileId = cf.Id) AS EvidenceCount
         FROM CaseFiles cf
         INNER JOIN CaseFileStatus s ON cf.StatusId = s.Id
         INNER JOIN Users reg ON cf.RegisteredById = reg.Id

@@ -1,7 +1,7 @@
 -- =============================================
 -- Stored Procedure: sp_GetCaseFileById
 -- Description: Gets a case file by ID with all details
--- Author: System
+-- Author: Carmelo May�n
 -- Date: 2025-11-18
 -- =============================================
 
@@ -43,7 +43,7 @@ BEGIN
             cf.ApprovedAt,
             cf.CreatedAt,
             cf.UpdatedAt,
-            (SELECT COUNT(*) FROM Evidence WHERE CaseFileId = cf.Id) AS EvidenceCount
+            (SELECT COUNT(*) FROM TraceEvidence WHERE CaseFileId = cf.Id) AS EvidenceCount
         FROM CaseFiles cf
         INNER JOIN CaseFileStatus s ON cf.StatusId = s.Id
         INNER JOIN Users reg ON cf.RegisteredById = reg.Id

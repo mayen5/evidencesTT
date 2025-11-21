@@ -1,7 +1,7 @@
 -- =============================================
 -- Script: Create All Tables
 -- Description: Creates all tables for Evidence Management System
--- Author: System
+-- Author: Carmelo Mayén
 -- Date: 2025-11-18
 -- =============================================
 
@@ -91,29 +91,29 @@ CREATE TABLE CaseFiles (
 GO
 
 -- =============================================
--- Table: EvidenceTypes
--- Description: Types of evidence (Arma, Droga, Documento, etc.)
+-- Table: TraceEvidenceTypes
+-- Description: Tipos de indicios (Arma, Droga, Documento, etc.)
 -- =============================================
-CREATE TABLE EvidenceTypes (
+CREATE TABLE TraceEvidenceTypes (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     Name NVARCHAR(100) NOT NULL UNIQUE,
     Description NVARCHAR(255) NULL,
     RequiresSpecialCare BIT NOT NULL DEFAULT 0,
     CreatedAt DATETIME2 NOT NULL DEFAULT GETDATE(),
-    CONSTRAINT CK_EvidenceTypes_Name CHECK (LEN(TRIM(Name)) > 0)
+    CONSTRAINT CK_TraceEvidenceTypes_Name CHECK (LEN(TRIM(Name)) > 0)
 );
 GO
 
 -- =============================================
--- Table: Evidence
--- Description: Evidence items (indicios) within case files
+-- Table: TraceEvidence
+-- Description: Indicios dentro de expedientes (elementos físicos recolectados en escena)
 -- =============================================
-CREATE TABLE Evidence (
+CREATE TABLE TraceEvidence (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     CaseFileId INT NOT NULL,
     EvidenceNumber NVARCHAR(50) NOT NULL,
     Description NVARCHAR(MAX) NOT NULL,
-    EvidenceTypeId INT NOT NULL,
+    TraceEvidenceTypeId INT NOT NULL,
     Color NVARCHAR(50) NULL,
     Size NVARCHAR(100) NULL,
     Weight DECIMAL(10,2) NULL,
@@ -123,13 +123,13 @@ CREATE TABLE Evidence (
     CollectedAt DATETIME2 NOT NULL DEFAULT GETDATE(),
     CreatedAt DATETIME2 NOT NULL DEFAULT GETDATE(),
     UpdatedAt DATETIME2 NOT NULL DEFAULT GETDATE(),
-    CONSTRAINT FK_Evidence_CaseFile FOREIGN KEY (CaseFileId) REFERENCES CaseFiles(Id) ON DELETE CASCADE,
-    CONSTRAINT FK_Evidence_Type FOREIGN KEY (EvidenceTypeId) REFERENCES EvidenceTypes(Id),
-    CONSTRAINT FK_Evidence_CollectedBy FOREIGN KEY (CollectedById) REFERENCES Users(Id),
-    CONSTRAINT UQ_Evidence_Number UNIQUE (CaseFileId, EvidenceNumber),
-    CONSTRAINT CK_Evidence_EvidenceNumber CHECK (LEN(TRIM(EvidenceNumber)) > 0),
-    CONSTRAINT CK_Evidence_Description CHECK (LEN(TRIM(Description)) > 0),
-    CONSTRAINT CK_Evidence_Weight CHECK (Weight IS NULL OR Weight >= 0)
+    CONSTRAINT FK_TraceEvidence_CaseFile FOREIGN KEY (CaseFileId) REFERENCES CaseFiles(Id) ON DELETE CASCADE,
+    CONSTRAINT FK_TraceEvidence_Type FOREIGN KEY (TraceEvidenceTypeId) REFERENCES TraceEvidenceTypes(Id),
+    CONSTRAINT FK_TraceEvidence_CollectedBy FOREIGN KEY (CollectedById) REFERENCES Users(Id),
+    CONSTRAINT UQ_TraceEvidence_Number UNIQUE (CaseFileId, EvidenceNumber),
+    CONSTRAINT CK_TraceEvidence_EvidenceNumber CHECK (LEN(TRIM(EvidenceNumber)) > 0),
+    CONSTRAINT CK_TraceEvidence_Description CHECK (LEN(TRIM(Description)) > 0),
+    CONSTRAINT CK_TraceEvidence_Weight CHECK (Weight IS NULL OR Weight >= 0)
 );
 GO
 
@@ -169,11 +169,11 @@ GO
 
 -- =============================================
 -- Table: Attachments
--- Description: File attachments for evidence or case files
+-- Description: Archivos adjuntos para indicios o expedientes
 -- =============================================
 CREATE TABLE Attachments (
     Id INT IDENTITY(1,1) PRIMARY KEY,
-    EvidenceId INT NULL,
+    TraceEvidenceId INT NULL,
     CaseFileId INT NULL,
     FileName NVARCHAR(255) NOT NULL,
     FilePath NVARCHAR(500) NOT NULL,
@@ -181,10 +181,10 @@ CREATE TABLE Attachments (
     FileSize BIGINT NULL,
     UploadedById INT NOT NULL,
     CreatedAt DATETIME2 NOT NULL DEFAULT GETDATE(),
-    CONSTRAINT FK_Attachments_Evidence FOREIGN KEY (EvidenceId) REFERENCES Evidence(Id) ON DELETE CASCADE,
+    CONSTRAINT FK_Attachments_TraceEvidence FOREIGN KEY (TraceEvidenceId) REFERENCES TraceEvidence(Id) ON DELETE CASCADE,
     CONSTRAINT FK_Attachments_CaseFile FOREIGN KEY (CaseFileId) REFERENCES CaseFiles(Id),
     CONSTRAINT FK_Attachments_UploadedBy FOREIGN KEY (UploadedById) REFERENCES Users(Id),
-    CONSTRAINT CK_Attachment_Reference CHECK (EvidenceId IS NOT NULL OR CaseFileId IS NOT NULL),
+    CONSTRAINT CK_Attachment_Reference CHECK (TraceEvidenceId IS NOT NULL OR CaseFileId IS NOT NULL),
     CONSTRAINT CK_Attachments_FileName CHECK (LEN(TRIM(FileName)) > 0),
     CONSTRAINT CK_Attachments_FilePath CHECK (LEN(TRIM(FilePath)) > 0),
     CONSTRAINT CK_Attachments_FileSize CHECK (FileSize IS NULL OR FileSize > 0)

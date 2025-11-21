@@ -1,7 +1,7 @@
 -- =============================================
 -- Stored Procedure: sp_CreateCaseFile
 -- Description: Creates a new case file
--- Author: System
+-- Author: Carmelo Mayén
 -- Date: 2025-11-18
 -- =============================================
 

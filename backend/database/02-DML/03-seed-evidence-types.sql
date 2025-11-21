@@ -1,7 +1,7 @@
 -- =============================================
 -- Script: Seed Evidence Types
--- Description: Insert initial evidence types
--- Author: System
+-- Description: Insertar tipos de indicios iniciales
+-- Author: Carmelo Mayén
 -- Date: 2025-11-18
 -- =============================================
 
@@ -9,9 +9,9 @@ USE EvidenceManagementDB;
 GO
 
 -- Insert Evidence Types
-SET IDENTITY_INSERT EvidenceTypes ON;
+SET IDENTITY_INSERT TraceEvidenceTypes ON;
 
-INSERT INTO EvidenceTypes (Id, Name, Description, RequiresSpecialCare) VALUES
+INSERT INTO TraceEvidenceTypes (Id, Name, Description, RequiresSpecialCare) VALUES
 (1, 'Arma de Fuego', 'Armas de fuego, pistolas, rifles y municiones', 1),
 (2, 'Arma Blanca', 'Cuchillos, navajas, machetes y objetos punzocortantes', 0),
 (3, 'Droga', 'Sustancias ilícitas y estupefacientes', 1),
@@ -24,9 +24,11 @@ INSERT INTO EvidenceTypes (Id, Name, Description, RequiresSpecialCare) VALUES
 (10, 'Dinero', 'Dinero en efectivo o valores', 1),
 (11, 'Vehículo', 'Vehículos relacionados con el caso', 0),
 (12, 'Ropa', 'Prendas de vestir y textiles', 0),
-(13, 'Otro', 'Otro tipo de evidencia no categorizada', 0);
+(13, 'Herramienta', 'Herramientas utilizadas en el crimen', 0),
+(14, 'Explosivo', 'Material explosivo o pirotécnico', 1),
+(15, 'Otro', 'Otro tipo de indicio no categorizado', 0);
 
-SET IDENTITY_INSERT EvidenceTypes OFF;
+SET IDENTITY_INSERT TraceEvidenceTypes OFF;
 GO
 
 PRINT 'Evidence Types seeded successfully!';

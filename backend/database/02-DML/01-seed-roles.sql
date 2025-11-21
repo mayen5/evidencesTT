@@ -1,7 +1,7 @@
 -- =============================================
 -- Script: Seed Roles
 -- Description: Insert initial roles
--- Author: System
+-- Author: Carmelo Mayén
 -- Date: 2025-11-18
 -- =============================================
 

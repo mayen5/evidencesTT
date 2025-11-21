@@ -1,7 +1,7 @@
 -- =============================================
 -- Stored Procedure: sp_ApproveCaseFile
 -- Description: Approves a case file by coordinator
--- Author: System
+-- Author: Carmelo Mayén
 -- Date: 2025-11-18
 -- =============================================
 

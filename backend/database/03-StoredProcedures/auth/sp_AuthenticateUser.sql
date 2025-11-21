@@ -1,7 +1,7 @@
 -- =============================================
 -- Stored Procedure: sp_AuthenticateUser
 -- Description: Authenticates a user by email
--- Author: System
+-- Author: Carmelo Mayén
 -- Date: 2025-11-18
 -- =============================================
 
