@@ -9,7 +9,7 @@ const DashboardPage = React.lazy(() => import('../pages/dashboard/DashboardPage.
 const CaseFilesListPage = React.lazy(() => import('../pages/caseFiles/CaseFilesListPage.tsx'));
 const CaseFileDetailPage = React.lazy(() => import('../pages/caseFiles/CaseFileDetailPage.tsx'));
 const CaseFileFormPage = React.lazy(() => import('../pages/caseFiles/CaseFileFormPage.tsx'));
-const EvidenceListPage = React.lazy(() => import('../pages/evidence/EvidenceListPage.tsx'));
+const TraceEvidenceListPage = React.lazy(() => import('../pages/traceEvidence/TraceEvidenceListPage.tsx'));
 const UsersListPage = React.lazy(() => import('../pages/users/UsersListPage.tsx'));
 const UnauthorizedPage = React.lazy(() => import('../pages/auth/UnauthorizedPage.tsx'));
 
@@ -84,12 +84,19 @@ export const AppRoutes: React.FC = () => {
                         }
                     />
 
-                    {/* Evidence Routes */}
+
+                    {/* Redirección de /evidence a /trace-evidence */}
                     <Route
                         path="/evidence"
+                        element={<Navigate to="/trace-evidence" replace />}
+                    />
+
+                    {/* Nueva ruta para TraceEvidence */}
+                    <Route
+                        path="/trace-evidence"
                         element={
                             <ProtectedRoute>
-                                <EvidenceListPage />
+                                <TraceEvidenceListPage />
                             </ProtectedRoute>
                         }
                     />

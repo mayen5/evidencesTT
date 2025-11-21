@@ -3,7 +3,6 @@ import type {
     CreateCaseFileDTO,
     UpdateCaseFileDTO,
     CaseFileFilters,
-    CaseFileStatus,
 } from '../types/caseFile.types';
 import type { PaginatedResponse, ApiResponse } from '../types/api.types';
 import { apiClient } from '../api/client';
@@ -27,13 +26,11 @@ export const caseFileService = {
         const params = new URLSearchParams({
             page: page.toString(),
             pageSize: limit.toString(),
-            ...(filters?.search && { search: filters.search }),
-            ...(filters?.statusId && { statusId: filters.statusId.toString() }),
-            ...(filters?.technicianId && { technicianId: filters.technicianId.toString() }),
-            ...(filters?.coordinatorId && { coordinatorId: filters.coordinatorId.toString() }),
-            ...(filters?.fromDate && { fromDate: filters.fromDate }),
-            ...(filters?.toDate && { toDate: filters.toDate }),
         });
+
+        if (filters?.search) params.append('search', filters.search);
+        if (filters?.statusId) params.append('statusId', filters.statusId.toString());
+        if (filters?.userId) params.append('userId', filters.userId.toString());
 
         const response = await apiClient.get<ApiResponse<any>>(
             `/case-files?${params.toString()}`
@@ -74,7 +71,7 @@ export const caseFileService = {
      * Update a case file
      */
     async update(id: number, data: UpdateCaseFileDTO): Promise<CaseFile> {
-        const response = await apiClient.put<ApiResponse<CaseFile>>(`/case-files/${id}`, data);
+        const response = await apiClient.patch<ApiResponse<CaseFile>>(`/case-files/${id}`, data);
         return response.data.data;
     },
 
@@ -86,12 +83,11 @@ export const caseFileService = {
     },
 
     /**
-     * Update case file status
+     * Submit case file for review
      */
-    async updateStatus(id: number, status: CaseFileStatus): Promise<CaseFile> {
-        const response = await apiClient.patch<ApiResponse<CaseFile>>(
-            `/case-files/${id}/status`,
-            { status }
+    async submit(id: number): Promise<CaseFile> {
+        const response = await apiClient.post<ApiResponse<CaseFile>>(
+            `/case-files/${id}/submit`
         );
         return response.data.data;
     },
@@ -99,9 +95,10 @@ export const caseFileService = {
     /**
      * Approve a case file
      */
-    async approve(id: number): Promise<CaseFile> {
+    async approve(id: number, approvedBy: number): Promise<CaseFile> {
         const response = await apiClient.post<ApiResponse<CaseFile>>(
-            `/case-files/${id}/approve`
+            `/case-files/${id}/approve`,
+            { approvedBy }
         );
         return response.data.data;
     },
@@ -109,10 +106,10 @@ export const caseFileService = {
     /**
      * Reject a case file
      */
-    async reject(id: number, reason: string): Promise<CaseFile> {
+    async reject(id: number, rejectedBy: number, rejectionReason: string): Promise<CaseFile> {
         const response = await apiClient.post<ApiResponse<CaseFile>>(
             `/case-files/${id}/reject`,
-            { reason }
+            { rejectedBy, rejectionReason }
         );
         return response.data.data;
     },

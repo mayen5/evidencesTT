@@ -4,7 +4,6 @@ import type {
     CreateCaseFileDTO,
     UpdateCaseFileDTO,
     CaseFileFilters,
-    CaseFileStatus,
 } from '../types/caseFile.types';
 import { caseFileService } from '../services/caseFileService';
 
@@ -120,22 +119,21 @@ export const useDeleteCaseFile = () => {
 };
 
 /**
- * Hook to update case file status
+ * Hook to submit case file for review
  */
-export const useUpdateCaseFileStatus = () => {
+export const useSubmitCaseFile = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ id, status }: { id: number; status: CaseFileStatus }) =>
-            caseFileService.updateStatus(id, status),
-        onSuccess: (_, variables) => {
+        mutationFn: (id: number) => caseFileService.submit(id),
+        onSuccess: (_, id) => {
             queryClient.invalidateQueries({ queryKey: caseFileKeys.lists() });
-            queryClient.invalidateQueries({ queryKey: caseFileKeys.detail(variables.id) });
+            queryClient.invalidateQueries({ queryKey: caseFileKeys.detail(id) });
             queryClient.invalidateQueries({ queryKey: caseFileKeys.statistics() });
-            toast.success('Estado actualizado exitosamente');
+            toast.success('Expediente enviado a revisión');
         },
         onError: (error: ErrorResponse) => {
-            toast.error(error?.response?.data?.message || 'Error al actualizar el estado');
+            toast.error(error?.response?.data?.message || 'Error al enviar el expediente');
         },
     });
 };
@@ -147,10 +145,11 @@ export const useApproveCaseFile = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (id: number) => caseFileService.approve(id),
-        onSuccess: (_, id) => {
+        mutationFn: ({ id, approvedBy }: { id: number; approvedBy: number }) =>
+            caseFileService.approve(id, approvedBy),
+        onSuccess: (_, variables) => {
             queryClient.invalidateQueries({ queryKey: caseFileKeys.lists() });
-            queryClient.invalidateQueries({ queryKey: caseFileKeys.detail(id) });
+            queryClient.invalidateQueries({ queryKey: caseFileKeys.detail(variables.id) });
             queryClient.invalidateQueries({ queryKey: caseFileKeys.statistics() });
             toast.success('Expediente aprobado exitosamente');
         },
@@ -167,8 +166,8 @@ export const useRejectCaseFile = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ id, reason }: { id: number; reason: string }) =>
-            caseFileService.reject(id, reason),
+        mutationFn: ({ id, rejectedBy, rejectionReason }: { id: number; rejectedBy: number; rejectionReason: string }) =>
+            caseFileService.reject(id, rejectedBy, rejectionReason),
         onSuccess: (_, variables) => {
             queryClient.invalidateQueries({ queryKey: caseFileKeys.lists() });
             queryClient.invalidateQueries({ queryKey: caseFileKeys.detail(variables.id) });

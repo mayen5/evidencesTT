@@ -44,9 +44,9 @@ const menuItems: MenuItem[] = [
         path: '/case-files',
     },
     {
-        text: 'Evidencias',
+        text: 'Indicios',
         icon: <DescriptionIcon />,
-        path: '/evidence',
+        path: '/trace-evidence',
     },
     {
         text: 'Usuarios',

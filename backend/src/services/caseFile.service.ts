@@ -49,10 +49,13 @@ export const getCaseFileById = async (caseFileId: number): Promise<ICaseFileResp
         incidentDate: caseFile.IncidentDate,
         createdBy: caseFile.CreatedBy,
         createdByName: caseFile.CreatedByName,
+        reviewedBy: caseFile.ReviewedBy,
+        reviewedByName: caseFile.ReviewedByName,
+        rejectionReason: caseFile.RejectionReason,
         createdAt: caseFile.CreatedAt,
-        updatedAt: caseFile.UpdatedAt,
-        approvedBy: caseFile.ApprovedBy,
+        reviewedAt: caseFile.ReviewedAt,
         approvedAt: caseFile.ApprovedAt,
+        updatedAt: caseFile.UpdatedAt,
         evidenceCount: caseFile.EvidenceCount,
     };
 };

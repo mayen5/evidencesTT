@@ -3,25 +3,23 @@ import sql from 'mssql';
 import { ICaseFile, IPaginatedCaseFiles } from '../types/caseFile.types';
 
 interface CaseFileRecord {
-    CaseFileId: number;
+    Id: number;
     CaseNumber: string;
     Title: string;
     Description: string;
+    IncidentDate: Date;
+    IncidentLocation: string | null;
     StatusId: number;
     StatusName: string;
-    Location: string | null;
-    IncidentDate: Date;
-    CreatedBy: number;
-    CreatedByName: string;
-    CreatedAt: Date;
-    UpdatedAt: Date;
-    ApprovedBy: number | null;
+    RegisteredById: number;
+    RegisteredByName: string;
+    ReviewedById: number | null;
+    ReviewedByName: string | null;
+    RejectionReason: string | null;
+    RegisteredAt: Date;
+    ReviewedAt: Date | null;
     ApprovedAt: Date | null;
     EvidenceCount: number;
-}
-
-interface TotalRecordResult {
-    TotalRecords: number;
 }
 
 /**
@@ -85,35 +83,37 @@ export const getAllCaseFiles = async (
     const pool = await getPool();
     const result = await pool
         .request()
-        .input('Page', sql.Int, page)
+        .input('PageNumber', sql.Int, page)
         .input('PageSize', sql.Int, pageSize)
         .input('StatusId', sql.Int, statusId || null)
-        .input('UserId', sql.Int, userId || null)
-        .input('SearchTerm', sql.VarChar(200), search || null)
+        .input('RegisteredById', sql.Int, userId || null)
+        .input('SearchTerm', sql.VarChar(255), search || null)
+        .output('TotalRecords', sql.Int)
         .execute('sp_GetAllCaseFiles');
 
-    // Type assertion for multiple recordsets
-    const recordsets = result.recordsets as unknown as [ CaseFileRecord[], TotalRecordResult[] ];
-    const caseFiles = recordsets[ 0 ] || [];
-    const totalRecords = recordsets[ 1 ] ? recordsets[ 1 ][ 0 ].TotalRecords : 0;
+    const caseFiles = result.recordset || [];
+    const totalRecords = result.output.TotalRecords || 0;
     const totalPages = Math.ceil(totalRecords / pageSize);
 
     return {
         caseFiles: caseFiles.map((cf: CaseFileRecord) => ({
-            caseFileId: cf.CaseFileId,
+            caseFileId: cf.Id,
             caseNumber: cf.CaseNumber,
             title: cf.Title,
             description: cf.Description,
             statusId: cf.StatusId,
             statusName: cf.StatusName,
-            location: cf.Location || undefined,
+            location: cf.IncidentLocation || undefined,
             incidentDate: cf.IncidentDate,
-            createdBy: cf.CreatedBy,
-            createdByName: cf.CreatedByName,
-            createdAt: cf.CreatedAt,
-            updatedAt: cf.UpdatedAt,
-            approvedBy: cf.ApprovedBy || undefined,
+            createdBy: cf.RegisteredById,
+            createdByName: cf.RegisteredByName,
+            reviewedBy: cf.ReviewedById || undefined,
+            reviewedByName: cf.ReviewedByName || undefined,
+            rejectionReason: cf.RejectionReason || undefined,
+            createdAt: cf.RegisteredAt,
+            reviewedAt: cf.ReviewedAt || undefined,
             approvedAt: cf.ApprovedAt || undefined,
+            updatedAt: cf.RegisteredAt,
             evidenceCount: cf.EvidenceCount,
         })),
         totalRecords,

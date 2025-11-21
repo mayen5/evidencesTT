@@ -1,8 +1,14 @@
 // API Response Types
 export interface ApiResponse<T = any> {
     success: boolean;
-    message: string;
+    message?: string;
     data: T;
+    pagination?: {
+        page: number;
+        pageSize: number;
+        total: number;
+        totalPages: number;
+    };
 }
 
 export interface PaginatedResponse<T> {

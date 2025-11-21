@@ -12,10 +12,13 @@ export interface ICaseFile {
     IncidentDate: Date;
     CreatedBy: number;
     CreatedByName?: string;
+    ReviewedBy?: number;
+    ReviewedByName?: string;
+    RejectionReason?: string;
     CreatedAt: Date;
-    UpdatedAt?: Date;
-    ApprovedBy?: number;
+    ReviewedAt?: Date;
     ApprovedAt?: Date;
+    UpdatedAt?: Date;
     EvidenceCount?: number;
 }
 
@@ -33,10 +36,13 @@ export interface ICaseFileResponse {
     incidentDate: Date;
     createdBy: number;
     createdByName?: string;
+    reviewedBy?: number;
+    reviewedByName?: string;
+    rejectionReason?: string;
     createdAt: Date;
-    updatedAt?: Date;
-    approvedBy?: number;
+    reviewedAt?: Date;
     approvedAt?: Date;
+    updatedAt?: Date;
     evidenceCount?: number;
 }
 

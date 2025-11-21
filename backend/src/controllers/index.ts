@@ -1,3 +1,3 @@
 export * from './auth.controller';
 export * from './caseFile.controller';
-export * from './evidence.controller';
+export * from './traceEvidence.controller';

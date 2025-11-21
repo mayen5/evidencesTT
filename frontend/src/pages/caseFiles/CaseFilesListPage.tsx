@@ -226,10 +226,9 @@ const CaseFilesListPage: React.FC = () => {
                                     }}
                                 >
                                     <TableCell>Número de Caso</TableCell>
-                                    <TableCell>Delito</TableCell>
-                                    <TableCell>Acusado</TableCell>
-                                    <TableCell>Víctima</TableCell>
-                                    <TableCell>Fiscal</TableCell>
+                                    <TableCell>Título</TableCell>
+                                    <TableCell>Ubicación</TableCell>
+                                    <TableCell>Creado Por</TableCell>
                                     <TableCell>Fecha del Incidente</TableCell>
                                     <TableCell>Estado</TableCell>
                                     <TableCell align="right">Acciones</TableCell>
@@ -238,26 +237,26 @@ const CaseFilesListPage: React.FC = () => {
                             <TableBody>
                                 {isLoading ? (
                                     <TableRow>
-                                        <TableCell colSpan={8} align="center" sx={{ py: 8 }}>
+                                        <TableCell colSpan={7} align="center" sx={{ py: 8 }}>
                                             <CircularProgress />
                                         </TableCell>
                                     </TableRow>
                                 ) : error ? (
                                     <TableRow>
-                                        <TableCell colSpan={8} align="center" sx={{ py: 8 }}>
+                                        <TableCell colSpan={7} align="center" sx={{ py: 8 }}>
                                             <Typography color="error">Error al cargar los expedientes</Typography>
                                         </TableCell>
                                     </TableRow>
                                 ) : data?.data.length === 0 ? (
                                     <TableRow>
-                                        <TableCell colSpan={8} align="center" sx={{ py: 8 }}>
+                                        <TableCell colSpan={7} align="center" sx={{ py: 8 }}>
                                             <Typography color="textSecondary">No se encontraron expedientes</Typography>
                                         </TableCell>
                                     </TableRow>
                                 ) : (
                                     data?.data.map((caseFile) => (
                                         <TableRow
-                                            key={caseFile.id}
+                                            key={caseFile.caseFileId}
                                             sx={{
                                                 '&:hover': {
                                                     backgroundColor: 'rgba(30, 60, 114, 0.04)',
@@ -268,16 +267,15 @@ const CaseFilesListPage: React.FC = () => {
                                             }}
                                         >
                                             <TableCell>{caseFile.caseNumber}</TableCell>
-                                            <TableCell>{caseFile.crime}</TableCell>
-                                            <TableCell>{caseFile.accused}</TableCell>
-                                            <TableCell>{caseFile.victim}</TableCell>
-                                            <TableCell>{caseFile.prosecutor}</TableCell>
+                                            <TableCell>{caseFile.title}</TableCell>
+                                            <TableCell>{caseFile.location || 'N/A'}</TableCell>
+                                            <TableCell>{caseFile.createdByName || 'N/A'}</TableCell>
                                             <TableCell>
                                                 {dayjs(caseFile.incidentDate).format('DD/MM/YYYY')}
                                             </TableCell>
                                             <TableCell>
                                                 <Chip
-                                                    label={statusLabels[ caseFile.statusId ]}
+                                                    label={caseFile.statusName || statusLabels[ caseFile.statusId ]}
                                                     color={statusColors[ caseFile.statusId ]}
                                                     size="small"
                                                 />
@@ -294,7 +292,7 @@ const CaseFilesListPage: React.FC = () => {
                                                             },
                                                             transition: 'all 0.2s',
                                                         }}
-                                                        onClick={() => navigate(`/case-files/${caseFile.id}`)}
+                                                        onClick={() => navigate(`/expedientes/${caseFile.caseFileId}`)}
                                                     >
                                                         <VisibilityIcon />
                                                     </IconButton>
@@ -310,7 +308,7 @@ const CaseFilesListPage: React.FC = () => {
                                                             },
                                                             transition: 'all 0.2s',
                                                         }}
-                                                        onClick={() => navigate(`/case-files/${caseFile.id}/edit`)}
+                                                        onClick={() => navigate(`/expedientes/${caseFile.caseFileId}/editar`)}
                                                     >
                                                         <EditIcon />
                                                     </IconButton>
@@ -330,7 +328,7 @@ const CaseFilesListPage: React.FC = () => {
                                                             },
                                                             transition: 'all 0.2s',
                                                         }}
-                                                        onClick={() => handleDelete(caseFile.id)}
+                                                        onClick={() => handleDelete(caseFile.caseFileId)}
                                                     >
                                                         <DeleteIcon />
                                                     </IconButton>

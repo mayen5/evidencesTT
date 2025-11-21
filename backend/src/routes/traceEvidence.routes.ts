@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as evidenceController from '../controllers/evidence.controller';
+import * as traceEvidenceController from '../controllers/traceEvidence.controller';
 import { authenticate } from '../middlewares/auth.middleware';
 
 const router = Router();
@@ -9,10 +9,33 @@ router.use(authenticate);
 
 /**
  * @swagger
- * /api/v1/evidence:
+ * /api/v1/trace-evidence:
+ *   get:
+ *     summary: Get all trace evidence with pagination
+ *     tags: [TraceEvidence]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Paginated list of all trace evidence
  *   post:
- *     summary: Add evidence to a case file
- *     tags: [Evidence]
+ *     summary: Add trace evidence to a case file
+ *     tags: [TraceEvidence]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -42,16 +65,17 @@ router.use(authenticate);
  *                 format: date-time
  *     responses:
  *       201:
- *         description: Evidence added successfully
+ *         description: Trace evidence added successfully
  */
-router.post('/', evidenceController.addEvidence);
+router.get('/', traceEvidenceController.getAllTraceEvidence);
+router.post('/', traceEvidenceController.addTraceEvidence);
 
 /**
  * @swagger
- * /api/v1/evidence/case-file/{caseFileId}:
+ * /api/v1/trace-evidence/case-file/{caseFileId}:
  *   get:
- *     summary: Get all evidence for a case file
- *     tags: [Evidence]
+ *     summary: Get all trace evidence for a case file
+ *     tags: [TraceEvidence]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -62,8 +86,8 @@ router.post('/', evidenceController.addEvidence);
  *           type: integer
  *     responses:
  *       200:
- *         description: List of evidence for case file
+ *         description: List of trace evidence for case file
  */
-router.get('/case-file/:caseFileId', evidenceController.getEvidenceByCaseFile);
+router.get('/case-file/:caseFileId', traceEvidenceController.getTraceEvidenceByCaseFile);
 
 export default router;

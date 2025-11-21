@@ -77,7 +77,7 @@ const Navbar: React.FC<NavbarProps> = ({ drawerWidth, onMenuClick, open }) => {
                 </IconButton>
 
                 <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-                    Sistema de Gestión de Evidencias
+                    Sistema de Gestión de Indicios
                 </Typography>
 
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
